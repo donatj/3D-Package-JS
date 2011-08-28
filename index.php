@@ -1,9 +1,10 @@
-<!doctype html>
+
+<!doctype html> 
 <html lang="en"> 
-<head>
-	<title>Canvas</title>
-	<script src="https://ajax.googleapis.com/ajax/libs/mootools/1.3.2/mootools-yui-compressed.js"></script>
-	<script>
+<head> 
+	<title>Canvas</title> 
+	<script src="https://ajax.googleapis.com/ajax/libs/mootools/1.3.2/mootools-yui-compressed.js"></script> 
+	<script> 
 	var xinc = 0;
 	
 	var Point3D = new Class({
@@ -52,13 +53,13 @@
 	
 	});
 	
-	var drawfun = function() {
-		xinc = xinc + 3;
+	var drawfun = function(xinc) {
+		
 	
 		var img_width  = 600;
 		var img_height = 600;
 	
-		var width = 5 + Math.sin( xinc / 10 ) * 3;
+		var width = 5;// + Math.sin( xinc / 10 ) * 3;
 		var height = 5;
 		var depth = 5;
 	
@@ -114,10 +115,27 @@
 		
 	};
 	
+	var x1 = 10;
+	var x2 = 30;
+	var x3 = 50;
+	var x4 = 70;
+	
 	function mainLoop() {
 		//ie hack
 		canvas.width = canvas.width;
-		drawfun();
+		
+		x4 += 1.4;
+		drawfun( x4 );
+		
+		x2 += 1.4;
+		drawfun( x2 );
+		
+		x3 += 1.4;
+		drawfun( x3 );
+		
+		x1 += 1.4;
+		drawfun( x1 );
+		
 	}
 	
 	window.onload = function(){ 
@@ -125,9 +143,9 @@
 		c2 = canvas.getContext("2d");
 		mainLoop.periodical(50); 
 	}
-	</script>
-</head>
-<body>
-<canvas id="xcanvas" width="600" height="600" />
-</body>
+	</script> 
+</head> 
+<body> 
+<canvas id="xcanvas" width="600" height="600" /> 
+</body> 
 </html>
