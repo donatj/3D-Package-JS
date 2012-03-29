@@ -115,26 +115,18 @@
 		
 	};
 	
-	var x1 = 10;
-	var x2 = 30;
-	var x3 = 50;
-	var x4 = 70;
+	var x1 = 0;
 	
 	function mainLoop() {
 		//ie hack
 		canvas.width = canvas.width;
 		
-		x4 += 1.4;
-		drawfun( x4 );
-		
-		x2 += 1.4;
-		drawfun( x2 );
-		
-		x3 += 1.4;
-		drawfun( x3 );
+		drawfun( x1 + 60 );
+		drawfun( x1 + 20 );
+		drawfun( x1 + 40 );
+		drawfun( x1 );
 		
 		x1 += 1.4;
-		drawfun( x1 );
 		
 	}
 	
