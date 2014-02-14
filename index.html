@@ -169,7 +169,7 @@ var Model3D = new Class({
 
 });
 
-var drawfun = function( xinc ) {
+var draw_box = function( xinc ) {
 
 
 	var img_width = 600;
@@ -281,7 +281,7 @@ var x1 = 0;
 
 var world = [];
 
-function mainLoop() {
+function Render() {
 	//ie hack
 	canvas.width = canvas.width;
 
@@ -293,7 +293,7 @@ function mainLoop() {
 	var img_width = 600;
 	var img_height = 600;
 
-	world.each(function(model){
+	world.each(function( model ) {
 		var projected_model = model.rotateX(angleX).rotateY(angleY).rotateZ(angleZ).project(img_width, img_height, 256, 20);
 		renderModel3D(projected_model);
 	});
@@ -315,7 +315,7 @@ window.onload = function() {
 		world.push(createModelFromPoints(e, x1));
 	});
 
-	mainLoop.periodical(300);
+	Render.periodical(50);
 }
 </script>
 </head>
