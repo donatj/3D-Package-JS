@@ -72,9 +72,9 @@ var Polygon3D = new Class({
 	rotateX: function( angle ) {
 		var poly = new Polygon3D();
 
-		this.points.each(function( e, i ) {
-			poly.pushPoint3D(e.rotateX(angle));
-		});
+		for( var p_i = 0; p_i < this.points.length; p_i++ ) {
+			poly.pushPoint3D(this.points[p_i].rotateX(angle));
+		}
 
 		return poly;
 	},
@@ -82,9 +82,9 @@ var Polygon3D = new Class({
 	rotateY: function( angle ) {
 		var poly = new Polygon3D();
 
-		this.points.each(function( e, i ) {
-			poly.pushPoint3D(e.rotateY(angle));
-		});
+		for( var p_i = 0; p_i < this.points.length; p_i++ ) {
+			poly.pushPoint3D(this.points[p_i].rotateY(angle));
+		}
 
 		return poly;
 	},
@@ -92,9 +92,9 @@ var Polygon3D = new Class({
 	rotateZ: function( angle ) {
 		var poly = new Polygon3D();
 
-		this.points.each(function( e, i ) {
-			poly.pushPoint3D(e.rotateZ(angle));
-		});
+		for( var p_i = 0; p_i < this.points.length; p_i++ ) {
+			poly.pushPoint3D(this.points[p_i].rotateZ(angle));
+		}
 
 		return poly;
 	},
@@ -102,9 +102,9 @@ var Polygon3D = new Class({
 	project: function( width, height, fov, viewerDistance ) {
 		var poly = new Polygon3D();
 
-		this.points.each(function( e, i ) {
-			poly.pushPoint3D(e.project(width, height, fov, viewerDistance));
-		});
+		for( var p_i = 0; p_i < this.points.length; p_i++ ) {
+			poly.pushPoint3D(this.points[p_i].project(width, height, fov, viewerDistance));
+		}
 
 		return poly;
 	}
@@ -130,9 +130,9 @@ var Model3D = new Class({
 	rotateX: function( angle ) {
 		var model = new Model3D();
 
-		this.polygons.each(function( e, i ) {
-			model.pushPolygon3D(e.rotateX(angle));
-		});
+		for( var p_i = 0; p_i < this.polygons.length; p_i++ ) {
+			model.pushPolygon3D(this.polygons[p_i].rotateX(angle));
+		}
 
 		return model;
 	},
@@ -140,9 +140,9 @@ var Model3D = new Class({
 	rotateY: function( angle ) {
 		var model = new Model3D();
 
-		this.polygons.each(function( e, i ) {
-			model.pushPolygon3D(e.rotateY(angle));
-		});
+		for( var p_i = 0; p_i < this.polygons.length; p_i++ ) {
+			model.pushPolygon3D(this.polygons[p_i].rotateY(angle));
+		}
 
 		return model;
 	},
@@ -150,9 +150,9 @@ var Model3D = new Class({
 	rotateZ: function( angle ) {
 		var model = new Model3D();
 
-		this.polygons.each(function( e, i ) {
-			model.pushPolygon3D(e.rotateZ(angle));
-		});
+		for( var p_i = 0; p_i < this.polygons.length; p_i++ ) {
+			model.pushPolygon3D(this.polygons[p_i].rotateZ(angle));
+		}
 
 		return model;
 	},
@@ -160,9 +160,9 @@ var Model3D = new Class({
 	project: function( width, height, fov, viewerDistance ) {
 		var model = new Model3D();
 
-		this.polygons.each(function( e, i ) {
-			model.pushPolygon3D(e.project(width, height, fov, viewerDistance));
-		});
+		for( var p_i = 0; p_i < this.polygons.length; p_i++ ) {
+			model.pushPolygon3D(this.polygons[p_i].project(width, height, fov, viewerDistance));
+		}
 
 		return model;
 	}
