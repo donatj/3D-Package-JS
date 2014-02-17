@@ -7,16 +7,14 @@
 var xinc = 0;
 var modelData;
 
-var Point3D = new Class({
 
-	x: 0, y: 0, z: 0,
+var Point3D = function( x, y, z ) {
+	this.x = x;
+	this.y = y;
+	this.z = z;
+}
 
-	initialize: function( x, y, z ) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
-	},
-
+Point3D.prototype = {
 	rotateX: function( angle ) {
 		var rad = angle * Math.PI / 180;
 		var cosa = Math.cos(rad);
@@ -50,19 +48,18 @@ var Point3D = new Class({
 		y = (0 - this.y) * factor + height / 2;
 		return new Point3D(x, y, this.z);
 	}
+}
 
-});
 
-var Polygon3D = new Class({
+var Polygon3D = function(){
+	this.points = [];
 
-	points: [],
+	for( var i = 0; i < arguments.length; i++ ) {
+		this.points.push(arguments[i]);
+	}
+}
 
-	initialize: function() {
-		for( var i = 0; i < arguments.length; i++ ) {
-			this.points.push(arguments[i]);
-		}
-	},
-
+Polygon3D.prototype = {
 	pushPoint3D: function() {
 		for( var i = 0; i < arguments.length; i++ ) {
 			this.points.push(arguments[i]);
@@ -108,19 +105,18 @@ var Polygon3D = new Class({
 
 		return poly;
 	}
+}
 
-});
 
-var Model3D = new Class({
+var Model3D = function(){
+	this.polygons = [];
 
-	polygons: [],
+	for( var i = 0; i < arguments.length; i++ ) {
+		this.polygons.push(arguments[i]);
+	}
+}
 
-	initialize: function() {
-		for( var i = 0; i < arguments.length; i++ ) {
-			this.polygons.push(arguments[i]);
-		}
-	},
-
+Model3D.prototype = {
 	pushPolygon3D: function() {
 		for( var i = 0; i < arguments.length; i++ ) {
 			this.polygons.push(arguments[i]);
@@ -166,8 +162,7 @@ var Model3D = new Class({
 
 		return model;
 	}
-
-});
+}
 
 var colors = [];
 
@@ -254,7 +249,8 @@ window.onload = function() {
 		world.push(createModelFromPoints(e));
 	});
 
-	Render.periodical(50);
+	Render.periodical(20);
+
 }
 </script>
 </head>
