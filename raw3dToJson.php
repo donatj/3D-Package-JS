@@ -12,7 +12,7 @@ if( $handle ) {
 	while( ($buffer = fgets($handle, 4096)) !== false ) {
 		$buffer = trim($buffer);
 
-		if (preg_match('/^([a-z]+\d+)$/si', $buffer)) {
+		if (preg_match('/^([a-z]*\d*)$/si', $buffer)) {
 			$index = $buffer;
 		}elseif( $index ) {
 			$data[ $index ][] = explode(' ', $buffer);
