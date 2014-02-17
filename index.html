@@ -219,12 +219,23 @@ function Render() {
 	var img_height = 600;
 
 	world.each(function( model ) {
-		var projected_model = model.rotateX(angleX).rotateY(angleY).rotateZ(angleZ).project(img_width, img_height, 256, 25);
+		var projected_model = model.rotateX(angleX).rotateY(angleY).rotateZ(angleZ).project(img_width, img_height, 256, 30);
 		renderModel3D(projected_model);
 	});
 
 	world_increment += 1.4;
 
+}
+
+function loadModel(filename) {
+	var modelData;
+	new Request.JSON({url: filename, async: false, onSuccess: function( data ) {
+		modelData = data;
+	}}).get();
+
+	Object.each(modelData, function( e ) {
+		world.push(createModelFromPoints(e));
+	});
 }
 
 
@@ -237,20 +248,14 @@ window.onload = function() {
 	// 	colors.push( 'rgba('+ parseInt((Math.sin(i / 100) * 255) + 50, 10) +',0,0,0.3)' );
 	// }
 
-//	colors = ['#F0F0F0', '#C8C8C8', '#DCDCDC', '#B4B4B4', '#A0A0A0', '#EEE', '#00F', '#0F0', '#F00', '#FF0', '#F0F', '#0FF'];
+	// colors = [ '#00F', '#0F0', '#F00', '#FF0', '#F0F', '#0FF', '#FAF', '#AFF', '#FFA'];
 
-	colors = ['rgba(255,0,0,0.3)'];
+	colors = ['rgba(255,0,0,0.2)'];
 
-	new Request.JSON({url: 'output.json', async: false, onSuccess: function( data ) {
-		modelData = data;
-	}}).get();
-
-	Object.each(modelData, function( e ) {
-		world.push(createModelFromPoints(e));
-	});
+	loadModel('models/cat.json');
+	loadModel('models/wineglass2.json');
 
 	Render.periodical(20);
-
 }
 </script>
 </head>
