@@ -169,11 +169,14 @@ var Model3D = new Class({
 
 });
 
+var colors = [];
 
 var renderModel3D = function( model ) {
 
-	model.polygons.each(function( poly, poly_i ) {
+	for( var poly_i = 0; poly_i < model.polygons.length; poly_i++ ) {
 //		console.log(poly.points[0].x, poly.points.length);
+
+		var poly = model.polygons[poly_i];
 
 		c2.fillStyle = colors[ poly_i % colors.length  ];
 		c2.beginPath();
@@ -183,10 +186,10 @@ var renderModel3D = function( model ) {
 		c2.closePath();
 		c2.fill();
 
-	})
+	}
 }
 
-var createModelFromPoints = function( modelData, xinc ) {
+var createModelFromPoints = function( modelData ) {
 
 	var model = new Model3D();
 
@@ -205,7 +208,7 @@ var createModelFromPoints = function( modelData, xinc ) {
 	return model;
 }
 
-var x1 = 0;
+var world_increment = 0;
 
 var world = [];
 
@@ -213,36 +216,42 @@ function Render() {
 	//ie hack
 	canvas.width = canvas.width;
 
-	colors = ['#F0F0F0', '#C8C8C8', '#DCDCDC', '#B4B4B4', '#A0A0A0', '#EEE', '#00F', '#0F0', '#F00', '#FF0', '#F0F', '#0FF'];
-
-	var angleX = -35 + x1;
-	var angleZ = 15 + x1 * .8;
-	var angleY = -30 + x1 + .5;
-
+	var angleX = -35 + world_increment;
+	var angleZ = 15 + world_increment * .8;
+	var angleY = -30 + world_increment + .5;
 
 	var img_width = 600;
 	var img_height = 600;
 
 	world.each(function( model ) {
-		var projected_model = model.rotateX(angleX).rotateY(angleY).rotateZ(angleZ).project(img_width, img_height, 256, 60);
+		var projected_model = model.rotateX(angleX).rotateY(angleY).rotateZ(angleZ).project(img_width, img_height, 256, 25);
 		renderModel3D(projected_model);
 	});
 
-	x1 += 1.4;
+	world_increment += 1.4;
 
 }
 
 
 window.onload = function() {
+
 	canvas = document.getElementById("xcanvas");
 	c2 = canvas.getContext("2d");
+
+	// for( var i = 0; i <= 255; i++ ) {
+	// 	colors.push( 'rgba('+ parseInt((Math.sin(i / 100) * 255) + 50, 10) +',0,0,0.3)' );
+	// }
+
+//	colors = ['#F0F0F0', '#C8C8C8', '#DCDCDC', '#B4B4B4', '#A0A0A0', '#EEE', '#00F', '#0F0', '#F00', '#FF0', '#F0F', '#0FF'];
+
+	colors = ['rgba(255,0,0,0.3)'];
 
 	new Request.JSON({url: 'output.json', async: false, onSuccess: function( data ) {
 		modelData = data;
 	}}).get();
 
-	Object.each(modelData, function( e, i ) {
-		world.push(createModelFromPoints(e, x1));
+	Object.each(modelData, function( e ) {
+		world.push(createModelFromPoints(e));
 	});
 
 	Render.periodical(50);
