@@ -46,7 +46,7 @@ Point3D.prototype = {
 	project: function( width, height, fov, viewerDistance ) {
 		var factor = parseFloat(fov) / (viewerDistance + this.z);
 		var x = this.x * factor + width / 2;
-		y = (0 - this.y) * factor + height / 2;
+		var y = (0 - this.y) * factor + height / 2;
 		return new Point3D(x, y, this.z);
 	}
 }
