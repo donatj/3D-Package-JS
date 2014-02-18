@@ -13,7 +13,7 @@ var Point3D = function( x, y, z ) {
 	this.x = x;
 	this.y = y;
 	this.z = z;
-}
+};
 
 Point3D.prototype = {
 	rotateX: function( angle ) {
@@ -49,7 +49,7 @@ Point3D.prototype = {
 		var y = (0 - this.y) * factor + height / 2;
 		return new Point3D(x, y, this.z);
 	}
-}
+};
 
 
 var Polygon3D = function(){
@@ -58,7 +58,7 @@ var Polygon3D = function(){
 	for( var i = 0; i < arguments.length; i++ ) {
 		this.points.push(arguments[i]);
 	}
-}
+};
 
 Polygon3D.prototype = {
 	pushPoint3D: function() {
@@ -106,7 +106,7 @@ Polygon3D.prototype = {
 
 		return poly;
 	}
-}
+};
 
 
 var Model3D = function(){
@@ -115,7 +115,7 @@ var Model3D = function(){
 	for( var i = 0; i < arguments.length; i++ ) {
 		this.polygons.push(arguments[i]);
 	}
-}
+};
 
 Model3D.prototype = {
 	pushPolygon3D: function() {
@@ -163,7 +163,7 @@ Model3D.prototype = {
 
 		return model;
 	}
-}
+};
 
 var colors = [];
 
@@ -183,7 +183,7 @@ var renderModel3D = function( model ) {
 		c2.fill();
 
 	}
-}
+};
 
 var createModelFromPoints = function( modelData ) {
 
@@ -202,7 +202,7 @@ var createModelFromPoints = function( modelData ) {
 	});
 
 	return model;
-}
+};
 
 // var world_increment = 0;
 
