@@ -52,7 +52,7 @@ Point3D.prototype = {
 };
 
 
-var Polygon3D = function(){
+var Polygon3D = function() {
 	this.points = [];
 
 	for( var i = 0; i < arguments.length; i++ ) {
@@ -109,7 +109,7 @@ Polygon3D.prototype = {
 };
 
 
-var Model3D = function(){
+var Model3D = function() {
 	this.polygons = [];
 
 	for( var i = 0; i < arguments.length; i++ ) {
@@ -208,10 +208,10 @@ var createModelFromPoints = function( modelData ) {
 
 var world = [];
 
-function Render(time) {
+function Render( time ) {
 	var world_increment = time / 20;
 
-	
+
 	//ie hack
 
 	canvas.width = canvas.width + 0;
@@ -232,7 +232,7 @@ function Render(time) {
 
 }
 
-function loadModel(filename) {
+function loadModel( filename ) {
 	var modelData;
 	new Request.JSON({url: filename, async: false, onSuccess: function( data ) {
 		modelData = data;
@@ -260,9 +260,9 @@ window.onload = function() {
 	loadModel('models/cat.json');
 	loadModel('models/wineglass2.json');
 
-	(function animloop(time){
-	  window.requestAnimationFrame(animloop);
-	  Render(time);
+	(function animloop( time ) {
+		window.requestAnimationFrame(animloop);
+		Render(time);
 	})();
 
 	// Render.periodical(20);
