@@ -50,6 +50,18 @@ Point3D.prototype = {
 		var x = this.x * factor + width / 2;
 		var y = (0 - this.y) * factor + height / 2;
 		return new Point3D(x, y, this.z);
+	},
+
+	moveX: function( offset ) {
+		return new Point3D(this.x + offset, this.y, this.z);
+	},
+
+	moveY: function( offset ) {
+		return new Point3D(this.x, this.y + offset, this.z);
+	},
+
+	moveZ: function( offset ) {
+		return new Point3D(this.x, this.y, this.z + offset);
 	}
 };
 
@@ -67,6 +79,15 @@ Polygon3D.prototype = {
 		for( var i = 0; i < arguments.length; i++ ) {
 			this.points.push(arguments[i]);
 		}
+	},
+
+	avgZ: function() {
+		var sum = 0;
+		for( var p_i = 0; p_i < this.points.length; p_i++ ) {
+			sum += this.points[p_i].z
+		}
+
+		return sum / this.points.length;
 	},
 
 	rotateX: function( angle ) {
@@ -104,6 +125,39 @@ Polygon3D.prototype = {
 
 		for( var p_i = 0; p_i < this.points.length; p_i++ ) {
 			poly.pushPoint3D(this.points[p_i].project(width, height, fov, viewerDistance));
+		}
+
+
+		return poly;
+	},
+
+	moveX: function( offset ) {
+		var poly = new Polygon3D();
+
+		for( var p_i = 0; p_i < this.points.length; p_i++ ) {
+			poly.pushPoint3D(this.points[p_i].moveX(offset));
+		}
+
+		return poly;
+	},
+
+	moveY: function( offset ) {
+		var poly = new Polygon3D();
+
+		for( var p_i = 0; p_i < this.points.length; p_i++ ) {
+			poly.pushPoint3D(this.points[p_i].moveY(offset));
+		}
+
+		poly.color = this.color;
+
+		return poly;
+	},
+
+	moveZ: function( offset ) {
+		var poly = new Polygon3D();
+
+		for( var p_i = 0; p_i < this.points.length; p_i++ ) {
+			poly.pushPoint3D(this.points[p_i].moveZ(offset));
 		}
 
 		return poly;
@@ -161,6 +215,36 @@ Model3D.prototype = {
 
 		for( var p_i = 0; p_i < this.polygons.length; p_i++ ) {
 			model.pushPolygon3D(this.polygons[p_i].project(width, height, fov, viewerDistance));
+		}
+
+		return model;
+	},
+
+	moveX: function( offset ) {
+		var model = new Model3D();
+
+		for( var p_i = 0; p_i < this.polygons.length; p_i++ ) {
+			model.pushPolygon3D(this.polygons[p_i].moveX(offset));
+		}
+
+		return model;
+	},
+
+	moveY: function( offset ) {
+		var model = new Model3D();
+
+		for( var p_i = 0; p_i < this.polygons.length; p_i++ ) {
+			model.pushPolygon3D(this.polygons[p_i].moveX(offset));
+		}
+
+		return model;
+	},
+
+	moveZ: function( offset ) {
+		var model = new Model3D();
+
+		for( var p_i = 0; p_i < this.polygons.length; p_i++ ) {
+			model.pushPolygon3D(this.polygons[p_i].moveX(offset));
 		}
 
 		return model;
