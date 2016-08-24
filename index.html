@@ -10,7 +10,6 @@
 var xinc = 0;
 var modelData;
 
-
 var Point3D = function( x, y, z ) {
 	this.x = x;
 	this.y = y;
@@ -24,7 +23,15 @@ Point3D.prototype = {
 		var sina = Math.sin(rad);
 		var y = this.y * cosa - this.z * sina;
 		var z = this.y * sina + this.z * cosa;
-		return new Point3D(this.x, y, z);
+		var x = this.x;
+
+		// var sizeOfWarp = Math.max(0, (Math.sin(xinc / 1000) * 10) + 5);
+
+		// x = x + (Math.sin((this.y / 2) + (xinc/500) )) * sizeOfWarp;
+		// y = y + (Math.cos((this.y / 2) + (xinc/400) )) * sizeOfWarp;
+		// z = z + (Math.cos((this.y / 2) + (xinc/300) )) * sizeOfWarp;
+
+		return new Point3D(x, y, z);
 	},
 
 	rotateY: function( angle ) {
@@ -75,6 +82,8 @@ var Polygon3D = function() {
 };
 
 Polygon3D.prototype = {
+	color: '#f00',
+
 	pushPoint3D: function() {
 		for( var i = 0; i < arguments.length; i++ ) {
 			this.points.push(arguments[i]);
@@ -97,6 +106,8 @@ Polygon3D.prototype = {
 			poly.pushPoint3D(this.points[p_i].rotateX(angle));
 		}
 
+		poly.color = this.color;
+
 		return poly;
 	},
 
@@ -106,6 +117,8 @@ Polygon3D.prototype = {
 		for( var p_i = 0; p_i < this.points.length; p_i++ ) {
 			poly.pushPoint3D(this.points[p_i].rotateY(angle));
 		}
+
+		poly.color = this.color;
 
 		return poly;
 	},
@@ -117,6 +130,8 @@ Polygon3D.prototype = {
 			poly.pushPoint3D(this.points[p_i].rotateZ(angle));
 		}
 
+		poly.color = this.color;
+
 		return poly;
 	},
 
@@ -127,6 +142,7 @@ Polygon3D.prototype = {
 			poly.pushPoint3D(this.points[p_i].project(width, height, fov, viewerDistance));
 		}
 
+		poly.color = this.color;
 
 		return poly;
 	},
@@ -137,6 +153,8 @@ Polygon3D.prototype = {
 		for( var p_i = 0; p_i < this.points.length; p_i++ ) {
 			poly.pushPoint3D(this.points[p_i].moveX(offset));
 		}
+
+		poly.color = this.color;
 
 		return poly;
 	},
@@ -159,6 +177,8 @@ Polygon3D.prototype = {
 		for( var p_i = 0; p_i < this.points.length; p_i++ ) {
 			poly.pushPoint3D(this.points[p_i].moveZ(offset));
 		}
+
+		poly.color = this.color;
 
 		return poly;
 	}
@@ -251,37 +271,59 @@ Model3D.prototype = {
 	}
 };
 
+
 var colors = [];
 
 var renderModel3D = function( model ) {
+
+	model.polygons.sort(function(a,b){
+		var aa = a.avgZ();
+		var bb = b.avgZ();
+		if( aa > bb ) {
+			return -1;
+		}else if( aa < bb ){
+			return 1;
+		}else{
+			return 0;
+		}
+	});
 
 	for( var poly_i = 0; poly_i < model.polygons.length; poly_i++ ) {
 //		console.log(poly.points[0].x, poly.points.length);
 
 		var poly = model.polygons[poly_i];
 
-		c2.fillStyle = colors[ poly_i % colors.length  ];
-		c2.beginPath();
-		c2.moveTo(poly.points[0].x, poly.points[0].y);
-		c2.lineTo(poly.points[1].x, poly.points[1].y);
-		c2.lineTo(poly.points[2].x, poly.points[2].y);
-		c2.closePath();
-		c2.fill();
+		// if(poly.avgZ() < 0) {
+			c2.fillStyle = poly.color;
+			c2.beginPath();
+			c2.moveTo(poly.points[0].x, poly.points[0].y);
+			c2.lineTo(poly.points[1].x, poly.points[1].y);
+			c2.lineTo(poly.points[2].x, poly.points[2].y);
+			c2.closePath();
+			// c2.stroke();
+			c2.fill();
+		// }
 
 	}
 };
 
-var createModelFromPoints = function( modelData ) {
+var createModelFromPoints = function( modelData, colors ) {
 
 	var model = new Model3D();
 
+	var poly_i = 0;
+
 	modelData.each(function( face, f_i ) {
+
+		poly_i++;
 
 		var polyface = new Polygon3D(
 				new Point3D(face[0], face[1], face[2]),
 				new Point3D(face[3], face[4], face[5]),
 				new Point3D(face[6], face[7], face[8])
 		);
+
+		polyface.color = colors[ poly_i % colors.length  ];
 
 		model.pushPolygon3D(polyface);
 
@@ -302,33 +344,45 @@ function Render( time ) {
 
 	window.canvas.width = window.canvas.width + 0;
 
-	var angleX = -35 + world_increment;
-	var angleZ = 15 + world_increment * .8;
-	var angleY = -30 + world_increment + .5;
+
+	var angleX = 0 + world_increment;
+	var angleZ = 0 - world_increment;
+	var angleY = 0 + world_increment;
 
 //	var img_width = 800;
 //	var img_height = 800;
 
-	world.each(function( model ) {
-		var projected_model = model.rotateX(angleX).rotateY(angleY).rotateZ(angleZ).project(window.canvas.width, window.canvas.height, 256, 30);
+	// world.sort(function(a,b){
+	// 	if(a.avgZ() > b.avgZ()) {
+	// 		return -1;
+	// 	}else if( a.avgZ() < b.avgZ() ){
+	// 		return 1;
+	// 	}else{
+	// 		return 0;
+	// 	}
+	// });
+
+	world.each(function( model, i ) {
+		var projected_model = model.rotateX(angleX).rotateY(angleY).rotateZ(angleZ).project(window.canvas.width, window.canvas.height, 256, 40);
 		renderModel3D(projected_model);
 	});
+
+	window.xinc = time;
 
 	// world_increment += 1.4;
 
 }
 
-function loadModel( filename ) {
+function loadModel( filename, colors ) {
 	var modelData;
 	new Request.JSON({url: filename, async: false, onSuccess: function( data ) {
 		modelData = data;
 	}}).get();
 
 	Object.each(modelData, function( e ) {
-		world.push(createModelFromPoints(e));
+		world.push(createModelFromPoints(e, colors));
 	});
 }
-
 
 window.onload = function() {
 
@@ -341,14 +395,29 @@ window.onload = function() {
 
 	// colors = [ '#00F', '#0F0', '#F00', '#FF0', '#F0F', '#0FF', '#FAF', '#AFF', '#FFA'];
 
-	colors = ['rgba(255,0,0,0.2)'];
+	// colors = ['rgba(255,0,0,0.2)', 'rgba(0,255,0,0.2)', 'rgba(0,255,0,1)', 'rgba(0,0,255,0.2)', 'rgba(255,0,0,1)'];
 
-	loadModel('models/cat.json');
-	loadModel('models/wineglass2.json');
+	// colors = ['rgba(255,0,0,0.6)', 'rgba(255,0,255,0.6)'];
+
+
+	// loadModel('models/cat.json', ['rgba(0,0,255,0.2)', 'rgba(0,0,255,0.4)', 'rgba(0,0,255,0.6)']);
+	// world[0] = world[0].rotateY(120);
+
+	// loadModel('models/cat.json', ['rgba(255,255,0,0.2)','rgba(255,255,0,0.4)','rgba(255,255,0,0.6)']);
+	// world[1] = world[1].rotateY(120 + 120);
+
+	// loadModel('models/wineglass.json', ['rgba(0,255,0,0.2)']);
+	// loadModel('models/wineglass2.json', ['rgba(0,255,255,0.2)']);
+	// loadModel('models/Key.json', ['rgba(128,128,128,0.4)']);
+	// loadModel('models/OliveOil.json', ['rgba(128,128,128,0.4)']);
+	loadModel('models/mario.json', ['rgba(255,0,0,0.2)','rgba(255,0,0,0.4)','rgba(255,0,0,0.6)']);
+	// world[1] = world[1].rotateY(120 + 120);
+	// loadModel('models/cat.json', ['rgba(255,0,0,0.2)','rgba(255,0,0,0.4)','rgba(255,0,0,0.6)']);
+	// loadModel('models/JeffThing.json', ['rgba(255,0,0,1)','rgba(255,0,0,1)','rgba(255,0,0,1)','rgba(255,0,0,1)','rgba(255,0,0,1)','rgba(255,0,0,1)','rgba(255,0,0,1)','rgba(255,0,0,1)','rgba(255,0,0,.3)','rgba(255,128,128,.3)']);
 
 	(function animloop( time ) {
 		window.requestAnimationFrame(animloop);
-		Render(time);
+		Render(time / 2);
 	})();
 
 	// Render.periodical(20);
